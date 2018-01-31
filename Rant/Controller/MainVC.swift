@@ -19,6 +19,11 @@ class MainVC: UIViewController {
         
         tableView.dataSource = self
         
+        PersistanceService.shared.getMessages { (messages) in
+            self.messages = messages
+            self.tableView.reloadData()
+        }
+        
     }
     
     @IBAction func onComposeTapped() {
@@ -34,6 +39,8 @@ class MainVC: UIViewController {
         let indexPath = IndexPath(row: messages.count - 1, section: 0)
         tableView.insertRows(at: [indexPath], with: .fade)
         tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        
+        PersistanceService.shared.save(messages)
     }
 
 }
