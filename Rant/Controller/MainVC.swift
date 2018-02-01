@@ -18,12 +18,22 @@ class MainVC: UIViewController {
         super.viewDidLoad()
         
         tableView.dataSource = self
+        User.currentUser.signIn()
         
         PersistanceService.shared.getMessages { (messages) in
             self.messages = messages
             self.tableView.reloadData()
         }
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !User.currentUser.isSignedIn() {
+            AlertService.signIn(to: self) {
+                print("Signed in!")
+            }
+        }
     }
     
     @IBAction func onComposeTapped() {
